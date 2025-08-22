@@ -5,65 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List - Pradana</title>
 
-    <!-- CSS External -->
-    <link rel="stylesheet" href="css/style.css" />
-
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS CDN yang stabil -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- CSS External -->
+    <link rel="stylesheet" href="css/Style.css" />
   </head>
 
-  <body>
-    <!-- Hero Website -->
-    <header>
-      <h1 class="text-4xl font-bold">Todo List</h1>
-    </header>
+  <body class="p-6">
+    <div class="max-w-4xl mx-auto">
+      <!-- Header -->
+      <header class="text-center mb-8">
+        <h1 class="text-5xl font-bold text-white mb-2">Todo List</h1>
+      </header>
 
-    <!-- Main Content, Todo List Form, List Todo -->
-    <main>
-      <form>
-        <input
-          type="text"
-          id="task-input"
-          placeholder="Add a new task"
-          class="border p-2 rounded"
-        />
-        <input type="date" id="due-date-input" class="border p-2 rounded" />
-        <button
-          type="button"
-          onclick="validateForm();"
-          class="bg-blue-500 text-white p-[8px] rounded"
+      <!-- Kartu statistik -->
+      <div class="card-container grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="glass stat-card rounded-xl p-4 text-center">
+          <div class="text-2xl mb-2">📋</div>
+          <div class="text-2xl font-bold text-white" id="total-tasks">0</div>
+          <div class="text-white opacity-70 text-sm">TOTAL TASKS</div>
+        </div>
+        <div class="glass stat-card rounded-xl p-4 text-center">
+          <div class="text-2xl mb-2">✅</div>
+          <div class="text-2xl font-bold text-green-400" id="completed-tasks">
+            0
+          </div>
+          <div class="text-white opacity-70 text-sm">COMPLETED</div>
+        </div>
+        <div class="glass stat-card rounded-xl p-4 text-center">
+          <div class="text-2xl mb-2">⏳</div>
+          <div class="text-2xl font-bold text-yellow-400" id="pending-tasks">
+            0
+          </div>
+          <div class="text-white opacity-70 text-sm">PENDING</div>
+        </div>
+        <div class="glass stat-card rounded-xl p-4 text-center">
+          <div class="text-2xl mb-2">📊</div>
+          <div class="text-2xl font-bold text-blue-400" id="progress-percent">
+            0%
+          </div>
+          <div class="text-white opacity-70 text-sm">PROGRESS</div>
+        </div>
+      </div>
+
+      <!-- Isi konten utama -->
+      <main class="glass rounded-2xl p-6">
+        <!-- Formulir penambahan Tugas-Tugas -->
+        <form class="mb-6" id="todo-form">
+          <div class="flex flex-col md:flex-row gap-3 mb-4">
+            <input
+              type="text"
+              id="task-input"
+              placeholder="Add a new task"
+              class="flex-1 border-0 p-3 rounded-lg bg-gray-400 bg-opacity-10 text-white placeholder-white placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <input
+              type="date"
+              id="due-date-input"
+              class="border-0 p-3 rounded-lg bg-gray-400 bg-opacity-10 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <button
+              type="button"
+              id="add-task-btn"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              Add Task
+            </button>
+          </div>
+        </form>
+
+        <!-- Pencarian dan filter -->
+        <div class="flex flex-col md:flex-row gap-3 mb-6">
+          <div class="flex-1 relative">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search tasks..."
+              class="search-input w-full border-0 p-3 pl-10 rounded-lg bg-gray-400 bg-opacity-10 text-white placeholder-white placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <div class="absolute left-3 top-3.5 text-white opacity-50">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <select
+            id="filter-select"
+            class="border-0 p-3 rounded-lg bg-gray-400 bg-opacity-10 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="all" class="bg-gray-800">All Tasks</option>
+            <option value="completed" class="bg-gray-800">Completed</option>
+            <option value="pending" class="bg-gray-800">Pending</option>
+          </select>
+          <button
+            id="delete-all-btn"
+            class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            Delete All
+          </button>
+        </div>
+
+        <!-- Sesi Tugas -->
+        <section>
+          <header class="mb-4">
+            <h2 class="text-2xl font-semibold text-white">Tasks</h2>
+          </header>
+
+          <!-- Container untuk tasks -->
+          <div
+            id="task-list"
+            class="task-container grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            <!-- Task-item akan ditambahkan lewat JS -->
+          </div>
+
+          <div
+            id="no-tasks"
+            class="text-center py-8 text-white opacity-50"
+            style="display: none"
+          >
+            <div class="text-4xl mb-2">📝</div>
+            <p>No tasks found</p>
+          </div>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="text-center mt-8">
+        <span class="text-white opacity-70"
+          >&copy; 2025 Pradana Wahyu. All rights reserved.</span
         >
-          Add
-        </button>
-      </form>
+      </footer>
+    </div>
 
-      <!-- Action button section -->
-      <section>
-        <button class="bg-green-500 text-white p-2 rounded">Filter</button>
-        <button onclick="deleteAll()" class="bg-red-500 text-white p-2 rounded">
-          Delete All
-        </button>
-      </section>
-
-      <!-- List of Task -->
-      <section>
-        <header>
-          <h2 class="text-2xl font-semibold">Tasks</h2>
-        </header>
-
-        <ul class="my-4" id="task-list">
-          <li class="border-b py-2">Task 1</li>
-          <li class="border-b py-2">Task 2</li>
-          <li class="border-b py-2">Task 3</li>
-        </ul>
-      </section>
-    </main>
-
-    <footer>
-      <span>&copy; 2025 Pradana Wahyu. All rights reserved.</span>
-    </footer>
-
-    <!-- JS External -->
-    <script src="js/script.js"></script>
+    <!-- JavaScript External -->
+    <script src="jss/script.js"></script>
   </body>
 </html>
